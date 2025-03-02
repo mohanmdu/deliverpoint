@@ -29,6 +29,9 @@ public class UserEntity extends AuditorEntity implements Serializable {
 	@Column(name = "LAST_NAME")
 	private String lastName;
 
+	@Column(name = "USER_NAME")
+	private String userName;
+
 	@Column(name = "EMAIL")
 	private String email;
 

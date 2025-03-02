@@ -59,13 +59,12 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public Optional<UserVO> findByUserEmail(String email) {
-        ObjectMapper ow = new ObjectMapper();
         try{
             Optional<UserEntity> userEntity = userRepository.findByEmail(email);
             if(userEntity.isPresent()){
-                String json = ow.writeValueAsString(userEntity.get());
-                UserVO userVO = ow.readValue(json, UserVO.class);
-                return Optional.of(userVO);
+               UserVO userVO = new UserVO();
+               BeanUtils.copyProperties(userEntity.get(), userVO);
+               return Optional.of(userVO);
             }
         }catch (Exception e){
             throw new CustomeException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),e.getStackTrace());
@@ -99,7 +98,7 @@ public class UserServiceImpl implements IUserService {
             if(StringUtils.isBlank(userVO.getLastName())){
                 error = error + " User Last Name";
             }
-            if(userVO.getUserType().isEmpty()){
+            if(StringUtils.isBlank(userVO.getUserType().name())){
                 error = error + " User Type";
             }
         }catch (Exception e){
