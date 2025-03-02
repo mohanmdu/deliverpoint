@@ -32,15 +32,15 @@ public class AddressEntity implements Serializable {
 
     @Column(name = "POSTAL_CODE")
     private String postalCode;
+    
+    @Column(name = "COUNTRY")
+    private String country;
 
     @Column(name = "ADDRESS_LINE_1")
     private String addressLine1;
 
     @Column(name = "ADDRESS_LINE_2")
     private String addressLine2;
-
-    @Column(name = "COUNTRY")
-    private String country;
 
     @ManyToMany(mappedBy = "addressList")
     private Set<UserEntity> deliveryUserId = new HashSet<>();
@@ -62,4 +62,7 @@ public class AddressEntity implements Serializable {
 
     @Column(name = "LAND_MARK")
     private String landMark;
+    
+    @Column(name = "LATLANG")
+    private String latlang;
 }

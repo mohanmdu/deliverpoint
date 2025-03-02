@@ -46,13 +46,13 @@ public class OrderEntity extends AuditorEntity implements Serializable {
     @ManyToMany(mappedBy = "deliveryOrders")
     private Set<UserEntity> deliveryUserDetails = new HashSet<>();
 
-    @Column(name = "PICK_START_TIME")
+    @Column(name = "PICK_UP_TIME")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date pickStartTime;
+    private Date pickupTime;
 
-    @Column(name = "PICK_END_TIME")
+    @Column(name = "DELIVERED_END_TIME")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date pickEndTime;
+    private Date deliveredEndTime;
 
     @Column(name = "ORDER_DISTANCE")
     private float orderDistance;

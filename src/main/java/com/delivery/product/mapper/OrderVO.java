@@ -23,8 +23,8 @@ public class OrderVO {
     private Set<UserVO> senderUserDetails = new HashSet<>();
     private Set<UserVO> receiverUserDetails = new HashSet<>();
     private Set<UserVO> deliveryUserDetails = new HashSet<>();
-    private Date pickStartTime;
-    private Date pickEndTime;
+	private Date pickupTime;
+    private Date deliveredEndTime;
     private float orderDistance;
     private float deliveryFees;
     private float weight;
