@@ -1,6 +1,7 @@
 package com.delivery.product.mapper;
 
 import com.delivery.product.enumeration.UserStatus;
+import com.delivery.product.enumeration.UserType;
 import lombok.*;
 
 import java.io.Serializable;
@@ -16,13 +17,14 @@ public class UserVO implements Serializable {
 
     private Long userId;
     private String firstName;
+    private String userName;
     private String lastName;
     private String email;
     private UserStatus status;
     private String password;
     private String mobileNumber;
     private String gender;
-    private String userType;
+    private UserType userType;
     private String createdBy;
     private Date createdDate;
     private String updatedName;

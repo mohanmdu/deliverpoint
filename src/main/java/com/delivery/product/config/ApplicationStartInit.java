@@ -40,7 +40,8 @@ public class ApplicationStartInit {
                 userVO1.setLastName("admin");
                 userVO1.setEmail("admin@gmail.com");
                 userVO1.setStatus(UserStatus.ACTIVE);
-                userVO1.setUserType(UserType.ADMIN.name());
+                userVO1.setUserType(UserType.ADMIN);
+                userVO1.setUserName("admin@gmail.com");
                 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
                 String encodedPassword = encoder.encode(defaultPassword);
                 userVO1.setPassword(encodedPassword);
