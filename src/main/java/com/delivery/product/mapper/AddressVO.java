@@ -24,4 +24,8 @@ public class AddressVO implements Serializable {
     private Set<UserVO> deliveryUserId = new HashSet<>();
     private Set<OrderVO> shippingOrder = new HashSet<>();
     private Set<OrderVO> deliveryOrder = new HashSet<>();
+    private String buildingName;
+    private String floor;
+    private String landMark;
+    private String flatNumber;
 }

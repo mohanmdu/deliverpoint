@@ -50,4 +50,16 @@ public class AddressEntity implements Serializable {
 
     @ManyToMany(mappedBy = "deliveryAddress")
     private Set<OrderEntity> deliveryOrder = new HashSet<>();
+
+    @Column(name = "BUILDING_NAME")
+    private String buildingName;
+
+    @Column(name = "FLOOR")
+    private String floor;
+
+    @Column(name = "FLAT_NUMBER")
+    private String flatNumber;
+
+    @Column(name = "LAND_MARK")
+    private String landMark;
 }
