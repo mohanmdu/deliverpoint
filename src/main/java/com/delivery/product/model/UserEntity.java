@@ -6,6 +6,7 @@ import java.util.Set;
 
 import com.delivery.product.enumeration.UserStatus;
 import com.delivery.product.enumeration.UserType;
+import com.delivery.product.mapper.AddressVO;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -38,9 +39,6 @@ public class UserEntity extends AuditorEntity implements Serializable {
 	@Column(name = "MOBILE_NUMBER")
 	private String mobileNumber;
 
-	@Column(name = "ALTERNATIVE_CONTACT_NUMBER")
-	private String alternativeContactNumber;
-
 	@Column(name = "GENDER")
 	private String gender;
 
@@ -61,28 +59,13 @@ public class UserEntity extends AuditorEntity implements Serializable {
 	@Column(name = "USER_TYPE")
 	private UserType userType;
 
-	@ManyToMany
-	@JoinTable(
-			name = "USER_ORDER_SENDER",
-			joinColumns = @JoinColumn(name = "USER_ID"),
-			inverseJoinColumns = @JoinColumn(name = "ORDER_ID")
-	)
+	@ManyToMany(mappedBy = "senderUserDetails")
 	private Set<OrderEntity> senderOrders = new HashSet<>();
 
-	@ManyToMany
-	@JoinTable(
-			name = "USER_ORDER_RECEIVER",
-			joinColumns = @JoinColumn(name = "USER_ID"),
-			inverseJoinColumns = @JoinColumn(name = "ORDER_ID")
-	)
+	@ManyToMany(mappedBy = "receiverUserDetails")
 	private Set<OrderEntity> receiverOrders = new HashSet<>();
 
-	@ManyToMany
-	@JoinTable(
-			name = "USER_ORDER_DELIVERY",
-			joinColumns = @JoinColumn(name = "USER_ID"),
-			inverseJoinColumns = @JoinColumn(name = "ORDER_ID")
-	)
+	@ManyToMany(mappedBy = "deliveryUserDetails")
 	private Set<OrderEntity> deliveryOrders = new HashSet<>();
 
 	@ManyToMany

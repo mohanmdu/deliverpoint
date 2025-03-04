@@ -22,4 +22,5 @@ public interface IUserService {
 
     boolean isExistUser(String email);
 
+    Optional<UserVO> findByUserContact(String mobileNumber);
 }

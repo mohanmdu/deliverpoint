@@ -42,14 +42,14 @@ public class AddressEntity implements Serializable {
     @Column(name = "ADDRESS_LINE_2")
     private String addressLine2;
 
-    @ManyToMany(mappedBy = "addressList")
-    private Set<UserEntity> deliveryUserId = new HashSet<>();
-
     @ManyToMany(mappedBy = "shippingAddress")
     private Set<OrderEntity> shippingOrder = new HashSet<>();
 
     @ManyToMany(mappedBy = "deliveryAddress")
     private Set<OrderEntity> deliveryOrder = new HashSet<>();
+
+    @ManyToMany(mappedBy = "addressList")
+    private Set<UserEntity> userAddress = new HashSet<>();
 
     @Column(name = "BUILDING_NAME")
     private String buildingName;

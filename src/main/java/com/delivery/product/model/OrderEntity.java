@@ -37,13 +37,28 @@ public class OrderEntity extends AuditorEntity implements Serializable {
     @Column(name = "DELIVERY_STATUS")
     private OrderStatus orderStatus;
 
-    @ManyToMany(mappedBy = "senderOrders")
+    @ManyToMany
+    @JoinTable(
+            name = "USER_ORDER_SENDER",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ORDER_ID")
+    )
     private Set<UserEntity> senderUserDetails = new HashSet<>();
 
-    @ManyToMany(mappedBy = "receiverOrders")
+    @ManyToMany
+    @JoinTable(
+            name = "USER_ORDER_RECEIVER",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ORDER_ID")
+    )
     private Set<UserEntity> receiverUserDetails = new HashSet<>();
 
-    @ManyToMany(mappedBy = "deliveryOrders")
+    @ManyToMany
+    @JoinTable(
+            name = "USER_ORDER_DELIVERY",
+            joinColumns = @JoinColumn(name = "USER_ID"),
+            inverseJoinColumns = @JoinColumn(name = "ORDER_ID")
+    )
     private Set<UserEntity> deliveryUserDetails = new HashSet<>();
 
     @Column(name = "PICK_UP_TIME")

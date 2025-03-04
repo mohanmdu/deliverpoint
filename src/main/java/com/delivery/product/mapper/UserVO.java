@@ -6,6 +6,8 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -24,10 +26,13 @@ public class UserVO implements Serializable {
     private String password;
     private String mobileNumber;
     private String gender;
+    private String country;
+    private String region;
     private UserType userType;
     private String createdBy;
     private Date createdDate;
     private String updatedName;
     private Date updatedDate;
+    private Set<AddressVO> addressList = new HashSet<>();
 
 }
