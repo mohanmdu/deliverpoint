@@ -1,0 +1,27 @@
+{
+  "firstName": "shagul",
+  "lastName": "hameed",
+  "email": "shagulham89@gmail.com",
+  "password": "shagul123$",
+  "mobileNumber": "1234567893",
+  "gender": "Male",
+  "country": "India",
+  "region": "Tamil Nadu",
+  "userType": "CUSTOMER",
+  "addressList": [
+    {
+      "street": "test customer",
+      "city": "test customer",
+      "state": "test customer",
+      "postalCode": "123456",
+      "addressLine1": "test customer",
+      "addressLine2": "test customer",
+      "country": "test customer",
+      "buildingName": "test customer",
+      "floor": "test customer",
+      "landMark": "test customer",
+      "flatNumber": "test customer",
+      "latlang": "test customer"
+    }
+  ]
+}

@@ -2,6 +2,7 @@ package com.delivery.product.controller;
 
 import com.delivery.product.constant.AppConstant;
 import com.delivery.product.constant.MessageConstant;
+import com.delivery.product.enumeration.UserStatus;
 import com.delivery.product.mapper.ResponseVO;
 import com.delivery.product.mapper.UserVO;
 import com.delivery.product.services.IUserService;
@@ -49,14 +50,17 @@ public class UserController {
     @Operation(summary = "Save User Service", description = "Save User Data", tags = {"Delivery Save User"})
     @PostMapping(value = "/save-user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseVO> saveUser(@RequestBody UserVO userVO){
+        userVO.setUserName(userVO.getEmail());
         Optional<UserVO> userVODb = userService.findByUserEmail(userVO.getEmail());
-        if(userVODb.isEmpty()){
+        Optional<UserVO> userVOContactDb = userService.findByUserContact(userVO.getMobileNumber());
+        if(userVODb.isEmpty() && userVOContactDb.isEmpty()){
             String error = userService.validateUserDetails(userVO);
             if(!StringUtils.isBlank(error)){
                 return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.INPUT_ERROR, error)), HttpStatus.BAD_REQUEST);
             } else {
                 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
                 String encodedPassword = encoder.encode(userVO.getPassword());
+                userVO.setStatus(UserStatus.ACTIVE);
                 userVO.setPassword(encodedPassword);
                 return new ResponseEntity<>(appUtil.successResponse(userService.saveUser(userVO), AppConstant.USER_RESPONSE_VO,MessageConstant.USER_CREATED_MSG), HttpStatus.CREATED);
             }

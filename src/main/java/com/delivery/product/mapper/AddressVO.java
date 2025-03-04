@@ -21,11 +21,12 @@ public class AddressVO implements Serializable {
     private String addressLine1;
     private String addressLine2;
     private String country;
-    private Set<UserVO> deliveryUserId = new HashSet<>();
+    private Set<UserVO> userAddress = new HashSet<>();
     private Set<OrderVO> shippingOrder = new HashSet<>();
     private Set<OrderVO> deliveryOrder = new HashSet<>();
     private String buildingName;
     private String floor;
     private String landMark;
     private String flatNumber;
+    private String latlang;
 }
