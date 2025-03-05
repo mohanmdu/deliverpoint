@@ -23,4 +23,7 @@ public class MessageConstant {
     public static final String ORDER_UPDATED_MSG="Order Updated Successfully";
     public static final String ORDER_DATA_NO_FOUND_DELIVERY_MSG="Delivery User Data Not Found in System";
     public static final String ORDER_DATA_USER_TYPE_DELIVERY_MSG="You don't have access to delivery the order";
+    public static final String CANCEL_ORDER_MSG="You don't have access to cancel the order";
+    public static final String ORDER_NOT_CANCEL_MSG="Order can't be cancelled";
+    public static final String CANCEL_ORDER_COMMENTS_MSG="Cancel Order Comments Should Not Be Empty";
 }

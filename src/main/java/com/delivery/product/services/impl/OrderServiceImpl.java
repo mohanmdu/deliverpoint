@@ -1,6 +1,7 @@
 package com.delivery.product.services.impl;
 
 import com.delivery.product.enumeration.OrderStatus;
+import com.delivery.product.enumeration.UserType;
 import com.delivery.product.exception.CustomeException;
 import com.delivery.product.mapper.AddressVO;
 import com.delivery.product.mapper.OrderVO;
@@ -192,7 +193,10 @@ public class OrderServiceImpl implements IOrderService {
                 Optional<UserEntity> userEntityOptional = userRepository.findById(userId);
                 if(userEntityOptional.isPresent()){
                     OrderEntity orderEntity = orderEntityOptional.get();
-                    orderEntity.setDeliveryUserDetails(Set.of(userEntityOptional.get()));
+                    Set<UserEntity> deliverUserDetails = new HashSet<>();
+                    deliverUserDetails.add(userEntityOptional.get());
+                    orderEntity.setDeliveryUserDetails(deliverUserDetails);
+
                     orderEntity.setOrderStatus(OrderStatus.IN_TRANSIT);
                     orderEntity.setDeliverBookDate(new Date());
                     orderRepository.save(orderEntity);
@@ -323,6 +327,55 @@ public class OrderServiceImpl implements IOrderService {
             throw new CustomeException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),e.getStackTrace());
         }
         return orderVOList;
+    }
+
+    @Override
+    public Optional<OrderVO> cancelOrderByDelivery(Long orderId, Long userId, String cancelMessage) {
+        try{
+            Optional<OrderEntity> orderEntityOptional = orderRepository.findById(orderId);
+            if(orderEntityOptional.isPresent()){
+                OrderEntity orderEntity = orderEntityOptional.get();
+                orderEntity.setOrderStatus(OrderStatus.CANCELED);
+                orderEntity.setCancelMessage(cancelMessage);
+                orderRepository.save(orderEntity);
+                return findByOrderId(orderId);
+            }
+            return Optional.empty();
+        }catch (Exception e){
+            throw new CustomeException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),e.getStackTrace());
+        }
+    }
+
+    @Override
+    public List<AddressVO> getAllAddressByUser(String userName, UserType userType) {
+        List<AddressVO> addressVOList = new ArrayList<>();
+        try{
+            List<OrderEntity> orderEntityList = orderRepository.findByCreatedBy(userName);
+            if(!orderEntityList.isEmpty()){
+                orderEntityList.forEach(e -> {
+                    if(userType.name().equalsIgnoreCase(UserType.CUSTOMER.name())){
+                        if(!e.getDeliveryAddress().isEmpty()){
+                            e.getDeliveryAddress().forEach(a -> {
+                                AddressVO addressVO = new AddressVO();
+                                BeanUtils.copyProperties(a, addressVO);
+                                addressVOList.add(addressVO);
+                            });
+                        }
+                    } else if(userType.name().equalsIgnoreCase(UserType.DELIVERY.name())){
+                        if(!e.getShippingAddress().isEmpty()){
+                            e.getShippingAddress().forEach(a -> {
+                                AddressVO addressVO = new AddressVO();
+                                BeanUtils.copyProperties(a, addressVO);
+                                addressVOList.add(addressVO);
+                            });
+                        }
+                    }
+                });
+            }
+        }catch (Exception e){
+            throw new CustomeException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),e.getStackTrace());
+        }
+        return addressVOList;
     }
 
 }

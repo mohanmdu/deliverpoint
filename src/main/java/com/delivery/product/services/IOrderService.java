@@ -1,6 +1,8 @@
 package com.delivery.product.services;
 
 import com.delivery.product.enumeration.OrderStatus;
+import com.delivery.product.enumeration.UserType;
+import com.delivery.product.mapper.AddressVO;
 import com.delivery.product.mapper.OrderVO;
 
 import java.util.List;
@@ -22,4 +24,8 @@ public interface IOrderService {
     Optional<OrderVO> completedOrderByDelivery(Long orderId, Long userId);
 
     List<OrderVO> findAllActiveOrder(String userId, OrderStatus orderStatus);
+
+    Optional<OrderVO> cancelOrderByDelivery(Long orderId, Long userId, String cancelMessage);
+
+    List<AddressVO> getAllAddressByUser(String userName, UserType userType);
 }

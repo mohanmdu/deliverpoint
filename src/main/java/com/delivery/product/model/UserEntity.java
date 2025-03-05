@@ -53,16 +53,16 @@ public class UserEntity extends AuditorEntity implements Serializable {
 	@Column(name = "USER_TYPE")
 	private UserType userType;
 
-	@ManyToMany(mappedBy = "senderUserDetails", fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
+	@ManyToMany(mappedBy = "senderUserDetails")
 	private Set<OrderEntity> senderOrders = new HashSet<>();
 
-	@ManyToMany(mappedBy = "receiverUserDetails", fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
+	@ManyToMany(mappedBy = "receiverUserDetails")
 	private Set<OrderEntity> receiverOrders = new HashSet<>();
 
-	@ManyToMany(mappedBy = "deliveryUserDetails", fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
+	@ManyToMany(mappedBy = "deliveryUserDetails")
 	private Set<OrderEntity> deliveryOrders = new HashSet<>();
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
+	@ManyToMany
 	@JoinTable(
 			name = "USER_ADDRESS",
 			joinColumns = @JoinColumn(name = "USER_ID"),

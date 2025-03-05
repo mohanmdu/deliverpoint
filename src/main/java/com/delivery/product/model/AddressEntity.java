@@ -42,13 +42,13 @@ public class AddressEntity implements Serializable {
     @Column(name = "ADDRESS_LINE_2")
     private String addressLine2;
 
-    @ManyToMany(mappedBy = "shippingAddress", fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
+    @ManyToMany(mappedBy = "shippingAddress")
     private Set<OrderEntity> shippingOrder = new HashSet<>();
 
-    @ManyToMany(mappedBy = "deliveryAddress", fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
+    @ManyToMany(mappedBy = "deliveryAddress")
     private Set<OrderEntity> deliveryOrder = new HashSet<>();
 
-    @ManyToMany(mappedBy = "addressList", fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
+    @ManyToMany(mappedBy = "addressList")
     private Set<UserEntity> userAddress = new HashSet<>();
 
     @Column(name = "BUILDING_NAME")
