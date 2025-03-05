@@ -128,4 +128,33 @@ public class OrderController {
         }
     }
 
+    @Operation(summary = "Cancel Order Service", description = "Cancel Order Service", tags = {"Cancel Order Service"})
+    @PostMapping(value = "/cancel-order-by-delivery", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseVO> cancelOrderByDelivery(@RequestParam Long orderId,
+                                                               @RequestParam Long userId,
+                                                               @RequestParam String comments){
+        Optional<OrderVO> orderVODB = orderService.findByOrderId(orderId);
+        if(orderVODB.isPresent()){
+            Optional<UserVO> userVO = userService.findByUserId(userId);
+            if(StringUtils.isBlank(comments)){
+                return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.CANCEL_ORDER_COMMENTS_MSG, userId)), HttpStatus.BAD_REQUEST);
+            }
+            if(userVO.isEmpty()){
+                return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.ORDER_DATA_NO_FOUND_DELIVERY_MSG, userId)), HttpStatus.BAD_REQUEST);
+            }
+            if(orderVODB.get().getOrderStatus().name().equalsIgnoreCase(OrderStatus.DELIVERED.name())
+                    || orderVODB.get().getOrderStatus().name().equalsIgnoreCase(OrderStatus.IN_TRANSIT.name())
+                     ||   orderVODB.get().getOrderStatus().name().equalsIgnoreCase(OrderStatus.SHIPPED.name())){
+                return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.ORDER_NOT_CANCEL_MSG, userId)), HttpStatus.BAD_REQUEST);
+            }
+            if(userVO.get().getUserType().name().equalsIgnoreCase(UserType.CUSTOMER.name()) || userVO.get().getUserType().name().equalsIgnoreCase(UserType.BUSINESS.name())){
+                return new ResponseEntity<>(appUtil.successResponse(orderService.cancelOrderByDelivery(orderId, userId, comments), AppConstant.ORDER_RESPONSE_VO,MessageConstant.ORDER_UPDATED_MSG), HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.CANCEL_ORDER_MSG, userId)), HttpStatus.BAD_REQUEST);
+            }
+        }else{
+            return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.ORDER_DATA_NO_FOUND_MSG, orderId)), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }

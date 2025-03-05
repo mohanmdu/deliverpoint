@@ -45,7 +45,10 @@ public class OrderEntity extends AuditorEntity implements Serializable {
     @Column(name = "DELIVERY_STATUS")
     private OrderStatus orderStatus;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
+    @Column(name = "CANCEL_MSG")
+    private String cancelMessage;
+
+    @ManyToMany
     @JoinTable(
             name = "USER_ORDER_SENDER",
             joinColumns = @JoinColumn(name = "USER_ID"),
@@ -53,7 +56,7 @@ public class OrderEntity extends AuditorEntity implements Serializable {
     )
     private Set<UserEntity> senderUserDetails = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
+    @ManyToMany
     @JoinTable(
             name = "USER_ORDER_RECEIVER",
             joinColumns = @JoinColumn(name = "USER_ID"),
@@ -61,7 +64,7 @@ public class OrderEntity extends AuditorEntity implements Serializable {
     )
     private Set<UserEntity> receiverUserDetails = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
+    @ManyToMany
     @JoinTable(
             name = "USER_ORDER_DELIVERY",
             joinColumns = @JoinColumn(name = "USER_ID"),
@@ -89,7 +92,7 @@ public class OrderEntity extends AuditorEntity implements Serializable {
     @Column(name = "COST")
     private double cost;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
+    @ManyToMany
     @JoinTable(
             name = "ORDER_SHIPPING_ADDRESS",
             joinColumns = @JoinColumn(name = "ORDER_ID"),
@@ -97,7 +100,7 @@ public class OrderEntity extends AuditorEntity implements Serializable {
     )
     private Set<AddressEntity> shippingAddress = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
+    @ManyToMany
     @JoinTable(
             name = "ORDER_DELIVERY_ADDRESS",
             joinColumns = @JoinColumn(name = "ORDER_ID"),

@@ -22,4 +22,6 @@ public interface IOrderService {
     Optional<OrderVO> completedOrderByDelivery(Long orderId, Long userId);
 
     List<OrderVO> findAllActiveOrder(String userId, OrderStatus orderStatus);
+
+    Optional<OrderVO> cancelOrderByDelivery(Long orderId, Long userId, String cancelMessage);
 }

@@ -192,7 +192,10 @@ public class OrderServiceImpl implements IOrderService {
                 Optional<UserEntity> userEntityOptional = userRepository.findById(userId);
                 if(userEntityOptional.isPresent()){
                     OrderEntity orderEntity = orderEntityOptional.get();
-                    orderEntity.setDeliveryUserDetails(Set.of(userEntityOptional.get()));
+                    Set<UserEntity> deliverUserDetails = new HashSet<>();
+                    deliverUserDetails.add(userEntityOptional.get());
+                    orderEntity.setDeliveryUserDetails(deliverUserDetails);
+
                     orderEntity.setOrderStatus(OrderStatus.IN_TRANSIT);
                     orderEntity.setDeliverBookDate(new Date());
                     orderRepository.save(orderEntity);
@@ -323,6 +326,23 @@ public class OrderServiceImpl implements IOrderService {
             throw new CustomeException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),e.getStackTrace());
         }
         return orderVOList;
+    }
+
+    @Override
+    public Optional<OrderVO> cancelOrderByDelivery(Long orderId, Long userId, String cancelMessage) {
+        try{
+            Optional<OrderEntity> orderEntityOptional = orderRepository.findById(orderId);
+            if(orderEntityOptional.isPresent()){
+                OrderEntity orderEntity = orderEntityOptional.get();
+                orderEntity.setOrderStatus(OrderStatus.CANCELED);
+                orderEntity.setCancelMessage(cancelMessage);
+                orderRepository.save(orderEntity);
+                return findByOrderId(orderId);
+            }
+            return Optional.empty();
+        }catch (Exception e){
+            throw new CustomeException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),e.getStackTrace());
+        }
     }
 
 }
