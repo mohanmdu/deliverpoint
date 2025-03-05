@@ -1,0 +1,125 @@
+{
+  "orderDesc": "test",
+  "orderType": "parcel",
+  "orderStatus": "PENDING",
+  "senderUserDetails": [
+    {
+      "userId": 5,
+      "name": "prem raj",
+      "userName": "6547891230",
+      "status": "ACTIVE",
+      "password": "$2a$10$HEvcjT1tWAelRhpLRXMkGeBr0gxymxu.GhOHEzJg/WaF038NuGzma",
+      "mobileNumber": "6547891230",
+      "gender": "Male",
+      "country": "India",
+      "region": "Tamil Nadu",
+      "userType": "BUSINESS",
+      "createdBy": "System",
+      "createdDate": "2025-03-05T00:25:28.712+00:00",
+      "updatedName": "System",
+      "updatedDate": "2025-03-05T00:25:28.712+00:00",
+      "addressList": [
+        {
+          "addressId": 3,
+          "street": "test BUSINESS",
+          "city": "test BUSINESS",
+          "state": "test BUSINESS",
+          "postalCode": "123456",
+          "addressLine1": "test BUSINESS",
+          "addressLine2": "test BUSINESS",
+          "country": "test BUSINESS",
+          "userAddress": [],
+          "shippingOrder": [],
+          "deliveryOrder": [],
+          "buildingName": "test BUSINESS",
+          "floor": "test BUSINESS",
+          "landMark": "test BUSINESS",
+          "flatNumber": "test BUSINESS",
+          "latlang": "test BUSINESS"
+        }
+      ]
+    }
+  ],
+  "receiverUserDetails": [
+    {
+      "userId": 3,
+      "name": "shagul hameed",
+      "userName": "1234567893",
+      "status": "ACTIVE",
+      "password": "$2a$10$V0vUAooWqJ1rnSdCTQ9saeIxyzOZyO3qaDUpp.6pwOao3AcQRmv12",
+      "mobileNumber": "1234567893",
+      "gender": "Male",
+      "country": "India",
+      "region": "Tamil Nadu",
+      "userType": "CUSTOMER",
+      "createdBy": "System",
+      "createdDate": "2025-03-05T00:22:59.621+00:00",
+      "updatedName": "System",
+      "updatedDate": "2025-03-05T00:22:59.621+00:00",
+      "addressList": [
+        {
+          "addressId": 1,
+          "street": "test customer",
+          "city": "test customer",
+          "state": "test customer",
+          "postalCode": "123456",
+          "addressLine1": "test customer",
+          "addressLine2": "test customer",
+          "country": "test customer",
+          "userAddress": [],
+          "shippingOrder": [],
+          "deliveryOrder": [],
+          "buildingName": "test customer",
+          "floor": "test customer",
+          "landMark": "test customer",
+          "flatNumber": "test customer",
+          "latlang": "test customer"
+        }
+      ]
+    }
+  ],
+  "deliveryUserDetails": [],
+  "shippingAddress": [
+    {
+      "addressId": 3,
+      "street": "test BUSINESS",
+      "city": "test BUSINESS",
+      "state": "test BUSINESS",
+      "postalCode": "123456",
+      "addressLine1": "test BUSINESS",
+      "addressLine2": "test BUSINESS",
+      "country": "test BUSINESS",
+      "userAddress": [],
+      "shippingOrder": [],
+      "deliveryOrder": [],
+      "buildingName": "test BUSINESS",
+      "floor": "test BUSINESS",
+      "landMark": "test BUSINESS",
+      "flatNumber": "test BUSINESS",
+      "latlang": "test BUSINESS"
+    }
+  ],
+  "deliveryAddress": [
+    {
+      "addressId": 1,
+      "street": "test customer",
+      "city": "test customer",
+      "state": "test customer",
+      "postalCode": "123456",
+      "addressLine1": "test customer",
+      "addressLine2": "test customer",
+      "country": "test customer",
+      "userAddress": [],
+      "shippingOrder": [],
+      "deliveryOrder": [],
+      "buildingName": "test customer",
+      "floor": "test customer",
+      "landMark": "test customer",
+      "flatNumber": "test customer",
+      "latlang": "test customer"
+    }
+  ],
+  "orderDistance": 11.5,
+  "weight": 55,
+  "cost": 2000
+}
