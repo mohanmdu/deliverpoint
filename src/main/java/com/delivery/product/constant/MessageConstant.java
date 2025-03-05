@@ -21,5 +21,6 @@ public class MessageConstant {
     public static final String ORDER_CREATED_MSG="Order Created Successfully";
     public static final String ORDER_DATA_NO_FOUND_MSG="Order not found %s in data base";
     public static final String ORDER_UPDATED_MSG="Order Updated Successfully";
-    public static final String ORDER_DELETED_MSG="Order Deleted Successfully";
+    public static final String ORDER_DATA_NO_FOUND_DELIVERY_MSG="Delivery User Data Not Found in System";
+    public static final String ORDER_DATA_USER_TYPE_DELIVERY_MSG="You don't have access to delivery the order";
 }

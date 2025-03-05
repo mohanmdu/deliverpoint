@@ -20,7 +20,7 @@ public class CustomUserDetails extends UserEntity implements UserDetails {
 	Collection<? extends GrantedAuthority> authorities;
 
 	public CustomUserDetails(UserVO user) {
-		this.username = user.getEmail();
+		this.username = user.getMobileNumber();
 		this.password = user.getPassword();
 	}
 

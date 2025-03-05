@@ -50,10 +50,9 @@ public class UserController {
     @Operation(summary = "Save User Service", description = "Save User Data", tags = {"Delivery Save User"})
     @PostMapping(value = "/save-user", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseVO> saveUser(@RequestBody UserVO userVO){
-        userVO.setUserName(userVO.getEmail());
-        Optional<UserVO> userVODb = userService.findByUserEmail(userVO.getEmail());
+        userVO.setUserName(userVO.getMobileNumber());
         Optional<UserVO> userVOContactDb = userService.findByUserContact(userVO.getMobileNumber());
-        if(userVODb.isEmpty() && userVOContactDb.isEmpty()){
+        if(userVOContactDb.isEmpty()){
             String error = userService.validateUserDetails(userVO);
             if(!StringUtils.isBlank(error)){
                 return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.INPUT_ERROR, error)), HttpStatus.BAD_REQUEST);
@@ -65,7 +64,7 @@ public class UserController {
                 return new ResponseEntity<>(appUtil.successResponse(userService.saveUser(userVO), AppConstant.USER_RESPONSE_VO,MessageConstant.USER_CREATED_MSG), HttpStatus.CREATED);
             }
         }else{
-            return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.USER_ALREADY_EXISTS_MSG, userVO.getEmail())), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.USER_ALREADY_EXISTS_MSG, userVO.getMobileNumber())), HttpStatus.BAD_REQUEST);
         }
     }
 

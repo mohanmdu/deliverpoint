@@ -18,10 +18,8 @@ public class UserVO implements Serializable {
     private static final long serialVersionUID = 1234567L;
 
     private Long userId;
-    private String firstName;
+    private String name;
     private String userName;
-    private String lastName;
-    private String email;
     private UserStatus status;
     private String password;
     private String mobileNumber;

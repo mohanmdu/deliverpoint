@@ -12,15 +12,11 @@ public interface IUserService {
 
     Optional<UserVO> findByUserId(Long userId);
 
-    Optional<UserVO> findByUserEmail(String email);
-
     String validateUserDetails(UserVO userVO);
 
     Optional<UserVO> saveUser(UserVO userVO);
 
     String deleteUser(Long userId);
-
-    boolean isExistUser(String email);
 
     Optional<UserVO> findByUserContact(String mobileNumber);
 }

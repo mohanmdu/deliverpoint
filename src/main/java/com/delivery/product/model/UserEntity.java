@@ -24,17 +24,11 @@ public class UserEntity extends AuditorEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long userId;
 
-	@Column(name = "FIRST_NAME")
-	private String firstName;
-
-	@Column(name = "LAST_NAME")
-	private String lastName;
+	@Column(name = "NAME")
+	private String name;
 
 	@Column(name = "USER_NAME")
 	private String userName;
-
-	@Column(name = "EMAIL")
-	private String email;
 
 	@Column(name = "MOBILE_NUMBER")
 	private String mobileNumber;
@@ -59,16 +53,16 @@ public class UserEntity extends AuditorEntity implements Serializable {
 	@Column(name = "USER_TYPE")
 	private UserType userType;
 
-	@ManyToMany(mappedBy = "senderUserDetails")
+	@ManyToMany(mappedBy = "senderUserDetails", fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
 	private Set<OrderEntity> senderOrders = new HashSet<>();
 
-	@ManyToMany(mappedBy = "receiverUserDetails")
+	@ManyToMany(mappedBy = "receiverUserDetails", fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
 	private Set<OrderEntity> receiverOrders = new HashSet<>();
 
-	@ManyToMany(mappedBy = "deliveryUserDetails")
+	@ManyToMany(mappedBy = "deliveryUserDetails", fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
 	private Set<OrderEntity> deliveryOrders = new HashSet<>();
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
 	@JoinTable(
 			name = "USER_ADDRESS",
 			joinColumns = @JoinColumn(name = "USER_ID"),
