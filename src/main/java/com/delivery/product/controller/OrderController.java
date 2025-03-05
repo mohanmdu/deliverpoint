@@ -49,6 +49,12 @@ public class OrderController {
         return new ResponseEntity<>(appUtil.successResponse(orderService.findAllActiveOrder(userName, orderStatus), AppConstant.ORDER_RESPONSE_VO, MessageConstant.ORDER_GET_ALL_MSG), HttpStatus.OK);
     }
 
+    @Operation(summary = "Get All Respective User Order Address Service", description = "Find All Respective User Order Address Service", tags = {"Get All Respective User Order Address Service"})
+    @GetMapping(value = "/get-all-active-order/{userName}/{userType}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseVO> getAllAddressByUser(@PathVariable String userName, @PathVariable UserType userType){
+        return new ResponseEntity<>(appUtil.successResponse(orderService.getAllAddressByUser(userName, userType), AppConstant.ORDER_RESPONSE_VO, MessageConstant.ORDER_GET_ALL_MSG), HttpStatus.OK);
+    }
+
     @Operation(summary = "Get Order By Id Service", description = "Find Order By Id Data", tags = {"Delivery Get Order By Id"})
     @GetMapping(value = "/get-by-order-id/{orderId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseVO> getByOrderId(@PathVariable Long orderId){
