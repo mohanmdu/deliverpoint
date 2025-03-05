@@ -33,11 +33,19 @@ public class OrderEntity extends AuditorEntity implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date orderDate;
 
+    @Column(name = "DELIVER_BOOK_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deliverBookDate;
+
+    @Column(name = "ORDER_COMPLETED_DATE")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date orderCompletedDate;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "DELIVERY_STATUS")
     private OrderStatus orderStatus;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
     @JoinTable(
             name = "USER_ORDER_SENDER",
             joinColumns = @JoinColumn(name = "USER_ID"),
@@ -45,7 +53,7 @@ public class OrderEntity extends AuditorEntity implements Serializable {
     )
     private Set<UserEntity> senderUserDetails = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
     @JoinTable(
             name = "USER_ORDER_RECEIVER",
             joinColumns = @JoinColumn(name = "USER_ID"),
@@ -53,7 +61,7 @@ public class OrderEntity extends AuditorEntity implements Serializable {
     )
     private Set<UserEntity> receiverUserDetails = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
     @JoinTable(
             name = "USER_ORDER_DELIVERY",
             joinColumns = @JoinColumn(name = "USER_ID"),
@@ -63,25 +71,25 @@ public class OrderEntity extends AuditorEntity implements Serializable {
 
     @Column(name = "PICK_UP_TIME")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date pickupTime;
+    private Date pickupStartTime;
 
     @Column(name = "DELIVERED_END_TIME")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date deliveredEndTime;
+    private Date pickupEndTime;
 
     @Column(name = "ORDER_DISTANCE")
-    private float orderDistance;
+    private double orderDistance;
 
     @Column(name = "DELIVERY_FEES")
-    private float deliveryFees;
+    private double deliveryFees;
 
     @Column(name = "WEIGHT")
-    private float weight;
+    private double weight;
 
     @Column(name = "COST")
-    private float cost;
+    private double cost;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
     @JoinTable(
             name = "ORDER_SHIPPING_ADDRESS",
             joinColumns = @JoinColumn(name = "ORDER_ID"),
@@ -89,7 +97,7 @@ public class OrderEntity extends AuditorEntity implements Serializable {
     )
     private Set<AddressEntity> shippingAddress = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE })
     @JoinTable(
             name = "ORDER_DELIVERY_ADDRESS",
             joinColumns = @JoinColumn(name = "ORDER_ID"),

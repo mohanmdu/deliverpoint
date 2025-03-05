@@ -85,43 +85,6 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public Optional<UserVO> findByUserEmail(String email) {
-        try{
-            Optional<UserEntity> userEntity = userRepository.findByEmail(email);
-            if(userEntity.isPresent()){
-               UserVO userVO = new UserVO();
-               BeanUtils.copyProperties(userEntity.get(), userVO);
-                if(!userEntity.get().getAddressList().isEmpty()){
-                    Set<AddressVO> addressVOS = new HashSet<>();
-                    userEntity.get().getAddressList().forEach(a -> {
-                        AddressVO addressVO = new AddressVO();
-                        BeanUtils.copyProperties(a, addressVO);
-                        addressVOS.add(addressVO);
-                    });
-                    userVO.setAddressList(addressVOS);
-                }
-               return Optional.of(userVO);
-            }
-        }catch (Exception e){
-            throw new CustomeException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),e.getStackTrace());
-        }
-        return Optional.empty();
-    }
-
-    @Override
-    public boolean isExistUser(String email) {
-        try{
-            Optional<UserEntity> userEntity = userRepository.findByEmail(email);
-            if(userEntity.isPresent()){
-                return true;
-            }
-        }catch (Exception e){
-            throw new CustomeException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),e.getStackTrace());
-        }
-        return false;
-    }
-
-    @Override
     public Optional<UserVO> findByUserContact(String mobileNumber) {
         try{
             Optional<UserEntity> userEntity = userRepository.findByMobileNumber(mobileNumber);
@@ -149,14 +112,9 @@ public class UserServiceImpl implements IUserService {
     public String validateUserDetails(UserVO userVO) {
         String error = "";
         try{
-            if(StringUtils.isBlank(userVO.getEmail())){
-                error = error + " User Email";
-            }
-            if(StringUtils.isBlank(userVO.getFirstName())){
-                error = error + " User First Name";
-            }
-            if(StringUtils.isBlank(userVO.getLastName())){
-                error = error + " User Last Name";
+
+            if(StringUtils.isBlank(userVO.getName())){
+                error = error + " User Name";
             }
             if(StringUtils.isBlank(userVO.getUserName())){
                 error = error + " User Name";

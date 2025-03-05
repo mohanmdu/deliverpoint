@@ -14,6 +14,8 @@ import org.springframework.context.event.EventListener;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ApplicationStartInit {
 
@@ -31,17 +33,16 @@ public class ApplicationStartInit {
     public void onApplicationEvent(ApplicationStartedEvent event){
         ObjectMapper mapper = new ObjectMapper();
         try{
-            boolean userVO = userService.isExistUser("admin@gmail.com");
-            if(userVO){
-                logger.info(String.format("Default user already exists %s ", "admin@gmail.com"));
+            Optional<UserVO> userVO = userService.findByUserContact("1234567890");
+            if(userVO.isPresent()){
+                logger.info(String.format("Default user already exists %s ", "1234567890"));
             } else {
                 UserVO userVO1 = new UserVO();
-                userVO1.setFirstName("admin");
-                userVO1.setLastName("admin");
-                userVO1.setEmail("admin@gmail.com");
+                userVO1.setName("admin");
                 userVO1.setStatus(UserStatus.ACTIVE);
+                userVO1.setMobileNumber("1234567890");
                 userVO1.setUserType(UserType.ADMIN);
-                userVO1.setUserName("admin@gmail.com");
+                userVO1.setUserName("1234567890");
                 BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
                 String encodedPassword = encoder.encode(defaultPassword);
                 userVO1.setPassword(encodedPassword);

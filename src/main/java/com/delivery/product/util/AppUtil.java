@@ -27,4 +27,18 @@ public class AppUtil {
         return responseVO;
     }
 
+    public double calculateDeliveryFees(double distanceInKm, double weightInKg, double cost){
+        // Inputs
+        double baseCharge = 50.0; // Base charge in currency units
+        double ratePerKm = 10.0; // Rate per kilometer
+        double ratePerKg = 15.0; // Rate per kilogram
+        double ratePerCost = 20.0; // Rate per cubic meter
+
+        // Calculate delivery charge
+        return baseCharge
+                + (distanceInKm * ratePerKm)
+                + (weightInKg * ratePerKg)
+                + (cost * ratePerCost);
+    }
+
 }
