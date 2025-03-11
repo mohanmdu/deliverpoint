@@ -11,9 +11,11 @@ public class MessageConstant {
     public static final String USER_GET_ALL_MSG="Get All User Successfully";
     public static final String USER_GET_BY_ID_MSG="Get User By Id Successfully";
     public static final String USER_DATA_NO_FOUND_MSG="User name not found %s in data base";
-    public static final String USER_ALREADY_EXISTS_MSG="User email already exists %s in data base";
+    public static final String USER_ALREADY_EXISTS_MSG="User mobile already exists %s in data base";
     public static final String INPUT_ERROR="Please validate input for %s";
     public static final String NO_DATA_FOUND="No Data Found";
+
+    public static final String USER_ALREADY_EXISTS_MSG_1="User email or mobile already exists %s in data base";
 
 
     public static final String ORDER_GET_ALL_MSG="Get All Order Successfully";

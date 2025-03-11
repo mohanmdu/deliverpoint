@@ -1,6 +1,7 @@
 package com.delivery.product.services.impl;
 
 import com.delivery.product.constant.AppConstant;
+import com.delivery.product.enumeration.UserStatus;
 import com.delivery.product.enumeration.UserType;
 import com.delivery.product.exception.CustomeException;
 import com.delivery.product.mapper.AddressVO;
@@ -87,7 +88,31 @@ public class UserServiceImpl implements IUserService {
     @Override
     public Optional<UserVO> findByUserContact(String mobileNumber) {
         try{
-            Optional<UserEntity> userEntity = userRepository.findByMobileNumber(mobileNumber);
+            Optional<UserEntity> userEntity = userRepository.findByMobileNumber(mobileNumber, UserStatus.ACTIVE);
+            if(userEntity.isPresent()){
+                UserVO userVO = new UserVO();
+                BeanUtils.copyProperties(userEntity.get(), userVO);
+                if(!userEntity.get().getAddressList().isEmpty()){
+                    Set<AddressVO> addressVOS = new HashSet<>();
+                    userEntity.get().getAddressList().forEach(a -> {
+                        AddressVO addressVO = new AddressVO();
+                        BeanUtils.copyProperties(a, addressVO);
+                        addressVOS.add(addressVO);
+                    });
+                    userVO.setAddressList(addressVOS);
+                }
+                return Optional.of(userVO);
+            }
+        }catch (Exception e){
+            throw new CustomeException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),e.getStackTrace());
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<UserVO> findByEmailMobileUserId(Long userId, String mobileNumber, String emailId) {
+        try{
+            Optional<UserEntity> userEntity = userRepository.findByEmailMobileUserId(userId, mobileNumber, emailId);
             if(userEntity.isPresent()){
                 UserVO userVO = new UserVO();
                 BeanUtils.copyProperties(userEntity.get(), userVO);
@@ -114,7 +139,7 @@ public class UserServiceImpl implements IUserService {
         try{
 
             if(StringUtils.isBlank(userVO.getName())){
-                error = error + " User Name";
+                error = error + " User Full Name";
             }
             if(StringUtils.isBlank(userVO.getUserName())){
                 error = error + " User Name";
@@ -124,9 +149,6 @@ public class UserServiceImpl implements IUserService {
             }
             if(StringUtils.isBlank(userVO.getMobileNumber())){
                 error = error + " Mobile Number";
-            }
-            if(StringUtils.isBlank(userVO.getGender())){
-                error = error + " Gender";
             }
             if(StringUtils.isBlank(userVO.getCountry())){
                 error = error + " Country";
