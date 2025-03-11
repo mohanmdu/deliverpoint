@@ -1,10 +1,15 @@
 package com.delivery.product.util;
 
 import com.delivery.product.mapper.ResponseVO;
+import com.delivery.product.security.CustomUserDetails;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class AppUtil {
@@ -25,6 +30,16 @@ public class AppUtil {
         responseVO.setErrorDetails(errorDetails);
         responseVO.setAppStatus(false);
         return responseVO;
+    }
+
+    public Optional<String> getCurrentAuditor() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = "System";
+        if(authentication != null){
+            CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+            currentPrincipalName = customUserDetails != null && !StringUtils.isBlank(customUserDetails.getUsername()) ? customUserDetails.getUsername() : "System";
+        }
+        return Optional.of(currentPrincipalName);
     }
 
     public double calculateDeliveryFees(double distanceInKm, double weightInKg, double cost){

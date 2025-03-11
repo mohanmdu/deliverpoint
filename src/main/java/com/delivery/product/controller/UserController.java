@@ -53,6 +53,7 @@ public class UserController {
         userVO.setUserName(userVO.getMobileNumber());
         Optional<UserVO> userVOContactDb = userService.findByUserContact(userVO.getMobileNumber());
         if(userVOContactDb.isEmpty()){
+            userVO.setUserName(userVO.getMobileNumber());
             String error = userService.validateUserDetails(userVO);
             if(!StringUtils.isBlank(error)){
                 return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.INPUT_ERROR, error)), HttpStatus.BAD_REQUEST);
@@ -73,6 +74,10 @@ public class UserController {
     public ResponseEntity<ResponseVO> updateUser(@PathVariable Long userId, @RequestBody UserVO userVO){
         Optional<UserVO> userVODb = userService.findByUserId(userId);
         if(userVODb.isPresent()){
+            Optional<UserVO> isExistsUser = userService.findByEmailMobileUserId(userId, userVO.getMobileNumber(), userVO.getEmailId());
+            if(isExistsUser.isPresent()){
+                return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.INPUT_ERROR, MessageConstant.USER_ALREADY_EXISTS_MSG_1)), HttpStatus.BAD_REQUEST);
+            }
             String error = userService.validateUserDetails(userVO);
             if(!StringUtils.isBlank(error)){
                 return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.INPUT_ERROR, error)), HttpStatus.BAD_REQUEST);

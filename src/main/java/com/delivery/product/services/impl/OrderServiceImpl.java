@@ -1,6 +1,7 @@
 package com.delivery.product.services.impl;
 
 import com.delivery.product.enumeration.OrderStatus;
+import com.delivery.product.enumeration.UserStatus;
 import com.delivery.product.enumeration.UserType;
 import com.delivery.product.exception.CustomeException;
 import com.delivery.product.mapper.AddressVO;
@@ -89,25 +90,25 @@ public class OrderServiceImpl implements IOrderService {
                 error.set(error + " Sender User Information");
             } else {
                 orderVO.getSenderUserDetails().forEach(e -> {
-                    if(userRepository.findById(e.getUserId()).isEmpty()){
+                    if(e.getUserId() != null && userRepository.findById(e.getUserId()).isEmpty()){
                         error.set(error + " Wrong Sender User Information");
                     }
                 });
             }
-            if(orderVO.getReceiverUserDetails().isEmpty()){
-                error.set(error + " Receiver User Information");
-            } else {
-                orderVO.getReceiverUserDetails().forEach(e -> {
-                    if(userRepository.findById(e.getUserId()).isEmpty()){
-                        error.set(error + " Wrong Receiver User Information");
-                    }
-                });
+            if(orderVO.getShippingAddress().isEmpty()){
+                error.set(error + " Shipping Address");
+            }
+            if(orderVO.getDeliveryAddress().isEmpty()){
+                error.set(error + " Delivery Address");
             }
             if(orderVO.getWeight() == 0){
                 error.set(error + " Order Weight");
             }
             if(orderVO.getCost() == 0){
                 error.set(error + " Order Cost");
+            }
+            if(orderVO.getDeliveryFees() == 0){
+                error.set(error + " Delivery Fee");
             }
         }catch (Exception e){
             throw new CustomeException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),e.getStackTrace());
@@ -125,57 +126,66 @@ public class OrderServiceImpl implements IOrderService {
 
             if(!orderVO.getSenderUserDetails().isEmpty()){
                 Set<UserEntity> senderUserDetails = new HashSet<>();
+
+                OrderEntity finalOrderEntity = orderEntity;
                 orderVO.getSenderUserDetails().forEach(e -> {
                     UserEntity userEntity = new UserEntity();
-                    BeanUtils.copyProperties(e, userEntity);
-                    senderUserDetails.add(userEntity);
+                    if(e.getUserId() == null){
+                        Optional<UserEntity> userVOContactDb = userRepository.findByMobileNumber(e.getMobileNumber(), UserStatus.ACTIVE);
+                        if(userVOContactDb.isPresent()){
+                            throw new CustomeException("Operation Failed", HttpStatus.BAD_REQUEST,"Shipping User Already Exists", null);
+                        }
+                        BeanUtils.copyProperties(e, userEntity);
+                        Set<AddressEntity> addressEntities = new HashSet<>();
+                        if(!orderVO.getShippingAddress().isEmpty()){
+                            orderVO.getShippingAddress().forEach(a -> {
+                                AddressEntity addressEntity = new AddressEntity();
+                                BeanUtils.copyProperties(a, addressEntity);
+                                addressEntity = addressRepository.save(addressEntity);
+                                addressEntities.add(addressEntity);
+                            });
+                            finalOrderEntity.setShippingAddress(addressEntities);
+                            userEntity.setAddressList(addressEntities);
+                            userEntity = userRepository.save(userEntity);
+                            senderUserDetails.add(userEntity);
+                        } else {
+                            throw new CustomeException("Operation Failed", HttpStatus.BAD_REQUEST,"Shipping Address Empty", null);
+                        }
+                    } else {
+                        Optional<UserEntity> userEntity1 = userRepository.findById(e.getUserId());
+                        if(userEntity1.isPresent()){
+                            userEntity = userEntity1.get();
+                        } else {
+                            throw new CustomeException("Operation Failed", HttpStatus.BAD_REQUEST,"Shipping User Details Not Found", null);
+                        }
+                        senderUserDetails.add(userEntity);
+                    }
                 });
                 orderEntity.setSenderUserDetails(senderUserDetails);
+            } else {
+                throw new CustomeException("Operation Failed", HttpStatus.BAD_REQUEST,"Shipping User Details Empty", null);
             }
 
-            if(!orderVO.getReceiverUserDetails().isEmpty()){
-                Set<UserEntity> receiverUserDetails = new HashSet<>();
-                orderVO.getReceiverUserDetails().forEach(e -> {
-                    UserEntity userEntity = new UserEntity();
-                    BeanUtils.copyProperties(e, userEntity);
-                    receiverUserDetails.add(userEntity);
-                });
-                orderEntity.setReceiverUserDetails(receiverUserDetails);
-            }
-
-            if(!orderVO.getDeliveryUserDetails().isEmpty()){
-                Set<UserEntity> deliveryUserDetails = new HashSet<>();
-                orderVO.getDeliveryUserDetails().forEach(e -> {
-                    UserEntity userEntity = new UserEntity();
-                    BeanUtils.copyProperties(e, userEntity);
-                    deliveryUserDetails.add(userEntity);
-                });
-                orderEntity.setDeliveryUserDetails(deliveryUserDetails);
-            }
-
-            if(!orderVO.getShippingAddress().isEmpty()){
-                Set<AddressEntity> shippingAddress = new HashSet<>();
-                orderVO.getShippingAddress().forEach(e -> {
-                    AddressEntity addressEntity = new AddressEntity();
-                    BeanUtils.copyProperties(e, addressEntity);
-                    addressEntity = addressRepository.save(addressEntity);
-                    shippingAddress.add(addressEntity);
-                });
-                orderEntity.setShippingAddress(shippingAddress);
-            }
-
+            Optional<UserEntity> userEntity = userRepository.findByMobileNumber(appUtil.getCurrentAuditor().get(), UserStatus.ACTIVE);
+            Set<AddressEntity> addressEntities = new HashSet<>();
             if(!orderVO.getDeliveryAddress().isEmpty()){
-                Set<AddressEntity> deliveryAddress = new HashSet<>();
                 orderVO.getDeliveryAddress().forEach(e -> {
                     AddressEntity addressEntity = new AddressEntity();
                     BeanUtils.copyProperties(e, addressEntity);
                     addressEntity = addressRepository.save(addressEntity);
-                    deliveryAddress.add(addressEntity);
+                    addressEntities.add(addressEntity);
+                    userEntity.get().getAddressList().add(addressEntity);
                 });
-                orderEntity.setDeliveryAddress(deliveryAddress);
+                orderEntity.setDeliveryAddress(addressEntities);
+            }else {
+                throw new CustomeException("Operation Failed", HttpStatus.BAD_REQUEST,"Delivery Address Details Empty", null);
             }
+            Set<UserEntity> receiverUserDetails = new HashSet<>();
+            UserEntity userEntity1 = userRepository.save(userEntity.get());
+            receiverUserDetails.add(userEntity1);
+            orderEntity.setReceiverUserDetails(receiverUserDetails);
 
-            orderEntity.setDeliveryFees(appUtil.calculateDeliveryFees(orderVO.getOrderDistance(),orderVO.getWeight(), orderVO.getCost()));
+           // orderEntity.setDeliveryFees(appUtil.calculateDeliveryFees(orderVO.getOrderDistance(),orderVO.getWeight(), orderVO.getCost()));
 
             orderEntity = orderRepository.save(orderEntity);
             orderVO.setOrderId(orderEntity.getOrderId());
@@ -263,6 +273,13 @@ public class OrderServiceImpl implements IOrderService {
             e.getSenderUserDetails().forEach(a -> {
                 UserVO userVO = new UserVO();
                 BeanUtils.copyProperties(a, userVO);
+                if(!a.getAddressList().isEmpty()){
+                    a.getAddressList().forEach(c -> {
+                        AddressVO addressVO = new AddressVO();
+                        BeanUtils.copyProperties(c, addressVO);
+                        userVO.getAddressList().add(addressVO);
+                    });
+                }
                 senderUserDetails.add(userVO);
             });
             orderVO.setSenderUserDetails(senderUserDetails);
@@ -273,6 +290,13 @@ public class OrderServiceImpl implements IOrderService {
             e.getReceiverUserDetails().forEach(b -> {
                 UserVO userVO = new UserVO();
                 BeanUtils.copyProperties(b, userVO);
+                if(!b.getAddressList().isEmpty()){
+                    b.getAddressList().forEach(c -> {
+                        AddressVO addressVO = new AddressVO();
+                        BeanUtils.copyProperties(c, addressVO);
+                        userVO.getAddressList().add(addressVO);
+                    });
+                }
                 receiverUserDetails.add(userVO);
             });
             orderVO.setReceiverUserDetails(receiverUserDetails);
@@ -283,6 +307,13 @@ public class OrderServiceImpl implements IOrderService {
             e.getDeliveryUserDetails().forEach(c -> {
                 UserVO userVO = new UserVO();
                 BeanUtils.copyProperties(c, userVO);
+                if(!c.getAddressList().isEmpty()){
+                    c.getAddressList().forEach(g -> {
+                        AddressVO addressVO = new AddressVO();
+                        BeanUtils.copyProperties(g, addressVO);
+                        userVO.getAddressList().add(addressVO);
+                    });
+                }
                 deliveryUserDetails.add(userVO);
             });
             orderVO.setDeliveryUserDetails(deliveryUserDetails);

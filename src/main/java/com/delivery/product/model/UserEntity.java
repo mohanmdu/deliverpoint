@@ -33,8 +33,14 @@ public class UserEntity extends AuditorEntity implements Serializable {
 	@Column(name = "MOBILE_NUMBER")
 	private String mobileNumber;
 
+	@Column(name = "EMAIL_ID")
+	private String emailId;
+
 	@Column(name = "GENDER")
 	private String gender;
+
+	@Column(name = "DEVICE_ID")
+	private String deviceId;
 
 	@Column(name = "REGION")
 	private String region;

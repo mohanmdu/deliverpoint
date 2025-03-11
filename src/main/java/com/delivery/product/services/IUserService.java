@@ -19,4 +19,6 @@ public interface IUserService {
     String deleteUser(Long userId);
 
     Optional<UserVO> findByUserContact(String mobileNumber);
+
+    Optional<UserVO> findByEmailMobileUserId(Long userId, String mobileNumber, String emailId);
 }
