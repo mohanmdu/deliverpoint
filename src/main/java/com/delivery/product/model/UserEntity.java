@@ -48,6 +48,12 @@ public class UserEntity extends AuditorEntity implements Serializable {
 	@Column(name = "COUNTRY")
 	private String country;
 	
+	@Column(name = "DELIVERY_ITEM")
+	private String deliveryItem;
+	
+	@Column(name = "NUM_DELIVERY")
+	private String numDelivery;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name = "STATUS")
 	private UserStatus status;
