@@ -100,5 +100,30 @@ public class UserController {
             return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.USER_DATA_NO_FOUND_MSG, userId)), HttpStatus.BAD_REQUEST);
         }
     }
+
+    @Operation(summary = "Login User Service", description = "Login User Data", tags = {"Delivery Login User"})
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseVO> lgin(@RequestBody UserVO userVO){
+        Optional<UserVO> userVOContactDb = userService.findByUserContact(userVO.getMobileNumber());
+        if(userVOContactDb.isPresent()){
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            if(!encoder.matches(userVO.getPassword(), userVOContactDb.get().getPassword())){
+                return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.PASSWORD_NOT_MATCH, userVO.getMobileNumber())), HttpStatus.BAD_REQUEST);
+            }
+            userVOContactDb.get().setDeviceId(userVO.getDeviceId());
+            return new ResponseEntity<>(appUtil.successResponse(userService.saveUserDeviceId(userVOContactDb.get()), AppConstant.USER_RESPONSE_VO,MessageConstant.LOGIN_SUCCESS), HttpStatus.CREATED);
+        }else{
+            return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.LOGIN_FAILED, userVO.getMobileNumber())), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Operation(summary = "Logout User Service", description = "Logout User Data", tags = {"Delivery Logout User"})
+    @GetMapping(value = "/logout/{userName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseVO> getByUserId(@PathVariable String userName){
+        Optional<UserVO> userVOContactDb = userService.findByUserContact(userName);
+        userVOContactDb.get().setDeviceId(null);
+        return new ResponseEntity<>(appUtil.successResponse(userService.saveUserDeviceId(userVOContactDb.get()), AppConstant.USER_RESPONSE_VO,MessageConstant.LOGIN_SUCCESS), HttpStatus.CREATED);
+    }
+
 }
 

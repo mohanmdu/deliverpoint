@@ -16,6 +16,8 @@ public interface IUserService {
 
     Optional<UserVO> saveUser(UserVO userVO);
 
+    Optional<UserVO> saveUserDeviceId(UserVO userVO);
+
     String deleteUser(Long userId);
 
     Optional<UserVO> findByUserContact(String mobileNumber);

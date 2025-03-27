@@ -197,6 +197,19 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public Optional<UserVO> saveUserDeviceId(UserVO userVO) {
+        try{
+            UserEntity userEntity = new UserEntity();
+            BeanUtils.copyProperties(userVO, userEntity);
+            userEntity = userRepository.save(userEntity);
+            userVO.setUserId(userEntity.getUserId());
+            return Optional.of(userVO);
+        }catch (Exception e){
+            throw new CustomeException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),e.getStackTrace());
+        }
+    }
+
+    @Override
     public String deleteUser(Long userId) {
         try{
             if(userRepository.findById(userId).isPresent()){
