@@ -41,6 +41,9 @@ public class SecurityConfig {
                 .cors(cors -> corsConfiguration())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers("/dlr/user/login").permitAll()
+                        .requestMatchers( "/dlr/user/save-user").permitAll()
+                        .requestMatchers("/dlr/user/logout").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
