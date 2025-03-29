@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class AuditorAwareImpl implements AuditorAware<String> {
 
@@ -14,10 +15,13 @@ public class AuditorAwareImpl implements AuditorAware<String> {
     public Optional<String> getCurrentAuditor() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = "System";
-        if(authentication != null){
-            CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
-            currentPrincipalName = customUserDetails != null && !StringUtils.isBlank(customUserDetails.getUsername()) ? customUserDetails.getUsername() : "System";
+        Object principal = authentication.getPrincipal();
+        if(principal instanceof UserDetails userDetails){
+            currentPrincipalName = userDetails.getUsername();
+        } else if(principal instanceof String userString){
+            currentPrincipalName = userString;
         }
+        currentPrincipalName = currentPrincipalName.equalsIgnoreCase("anonymousUser") ? "System" : currentPrincipalName;
         return Optional.of(currentPrincipalName);
     }
 
