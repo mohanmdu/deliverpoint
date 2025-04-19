@@ -3,6 +3,7 @@ package com.delivery.product.controller;
 import com.delivery.product.constant.AppConstant;
 import com.delivery.product.constant.MessageConstant;
 import com.delivery.product.enumeration.UserStatus;
+import com.delivery.product.mapper.ChangePassword;
 import com.delivery.product.mapper.ResponseVO;
 import com.delivery.product.mapper.UserVO;
 import com.delivery.product.services.IUserService;
@@ -153,6 +154,23 @@ public class UserController {
             return new ResponseEntity<>(appUtil.successResponse(userService.saveUserDeviceId(userVOContactDb.get()), AppConstant.USER_RESPONSE_VO,MessageConstant.LOGOUT_SUCCESS), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(appUtil.successResponse(userVOContactDb, AppConstant.USER_RESPONSE_VO,MessageConstant.LOGOUT_SUCCESS), HttpStatus.CREATED);
+    }
+
+    @Operation(summary = "Change Password User Service", description = "Change Password User Data", tags = {"Change User Password"})
+    @PostMapping(value = "/change-password", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseVO> changePassword(@RequestBody ChangePassword changePassword){
+        Optional<UserVO> userVOContactDb = userService.findByUserId(changePassword.getUserId());
+        if(userVOContactDb.isPresent()){
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            if(!encoder.matches(changePassword.getOldPassword(), userVOContactDb.get().getPassword())){
+                return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.PASSWORD_NOT_MATCH, changePassword.getUserId())), HttpStatus.BAD_REQUEST);
+            }
+            String encodedPassword = encoder.encode(changePassword.getNewPassword());
+            userVOContactDb.get().setPassword(encodedPassword);
+            return new ResponseEntity<>(appUtil.successResponse(userService.saveUserDeviceId(userVOContactDb.get()), AppConstant.USER_RESPONSE_VO,MessageConstant.LOGIN_SUCCESS), HttpStatus.CREATED);
+        }else{
+            return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.LOGIN_FAILED, changePassword.getUserId())), HttpStatus.BAD_REQUEST);
+        }
     }
 
 }
