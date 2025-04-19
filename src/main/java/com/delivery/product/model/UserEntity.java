@@ -77,6 +77,14 @@ public class UserEntity extends AuditorEntity implements Serializable {
 	@ManyToMany(mappedBy = "deliveryUserDetails")
 	private Set<OrderEntity> deliveryOrders = new HashSet<>();
 
+	@Lob
+	@Column(name = "USER_PROFILE", nullable = false)
+	private String userProfile;
+
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "DELIVERY_IDENTIFICATION_ID", referencedColumnName = "ID")
+	private DeliveryUserIdentificationEntity deliveryUserIdentification;
+
 	@ManyToMany
 	@JoinTable(
 			name = "USER_ADDRESS",

@@ -1,9 +1,6 @@
 package com.delivery.product.mapper;
 
 import com.delivery.product.enumeration.OrderStatus;
-import com.delivery.product.model.AddressEntity;
-import com.delivery.product.model.UserEntity;
-import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 

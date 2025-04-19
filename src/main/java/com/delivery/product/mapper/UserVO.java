@@ -2,6 +2,7 @@ package com.delivery.product.mapper;
 
 import com.delivery.product.enumeration.UserStatus;
 import com.delivery.product.enumeration.UserType;
+import com.delivery.product.model.DeliveryUserIdentificationEntity;
 import lombok.*;
 
 import java.io.Serializable;
@@ -35,5 +36,7 @@ public class UserVO implements Serializable {
     private String updatedName;
     private Date updatedDate;
     private Set<AddressVO> addressList = new HashSet<>();
+    private String userProfile;
+    private DeliveryUserIdentificationVO deliveryUserIdentification;
 
 }
