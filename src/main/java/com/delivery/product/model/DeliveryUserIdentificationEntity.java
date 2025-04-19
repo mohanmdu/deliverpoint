@@ -45,7 +45,7 @@ public class DeliveryUserIdentificationEntity {
     @Column(name = "ACCOUNT_TYPE", nullable = false)
     private AccountType accountType;
 
-    @OneToOne(mappedBy = "deliveryUserIdentificationEntity")
+    @OneToOne(mappedBy = "deliveryUserIdentification")
     private UserEntity user;
 
 }

@@ -78,11 +78,11 @@ public class UserEntity extends AuditorEntity implements Serializable {
 	private Set<OrderEntity> deliveryOrders = new HashSet<>();
 
 	@Lob
-	@Column(name = "USER_PROFILE", nullable = false)
+	@Column(name = "USER_PROFILE")
 	private String userProfile;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "DELIVERY_IDENTIFICATION_ID", referencedColumnName = "ID")
+	@JoinColumn(name = "USER_DELIVERY_IDENTIFICATION_ID", referencedColumnName = "DELIVERY_IDENTIFICATION_ID")
 	private DeliveryUserIdentificationEntity deliveryUserIdentification;
 
 	@ManyToMany

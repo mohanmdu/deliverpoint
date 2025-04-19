@@ -40,7 +40,10 @@ public class UserServiceImpl implements IUserService {
             userRepository.findAll().forEach(e -> {
                 UserVO userVO = new UserVO();
                 BeanUtils.copyProperties(e, userVO);
-                BeanUtils.copyProperties(e.getDeliveryUserIdentification(), userVO.getDeliveryUserIdentification());
+                if(e.getDeliveryUserIdentification() != null){
+                    BeanUtils.copyProperties(e.getDeliveryUserIdentification(), userVO.getDeliveryUserIdentification());
+                }
+
                 if(!e.getAddressList().isEmpty()){
                     Set<AddressVO> addressVOS = new HashSet<>();
                     e.getAddressList().forEach(a -> {
@@ -68,7 +71,9 @@ public class UserServiceImpl implements IUserService {
             if(userEntity.isPresent()){
                 UserVO userVO = new UserVO();
                 BeanUtils.copyProperties(userEntity.get(), userVO);
-                BeanUtils.copyProperties(userEntity.get().getDeliveryUserIdentification(), userVO.getDeliveryUserIdentification());
+                if(userEntity.get().getDeliveryUserIdentification() != null){
+                    BeanUtils.copyProperties(userEntity.get().getDeliveryUserIdentification(), userVO.getDeliveryUserIdentification());
+                }
                 userVO.setPassword(null);
                 if(!userEntity.get().getAddressList().isEmpty()){
                     Set<AddressVO> addressVOS = new HashSet<>();
@@ -95,7 +100,9 @@ public class UserServiceImpl implements IUserService {
             if(userEntity.isPresent()){
                 UserVO userVO = new UserVO();
                 BeanUtils.copyProperties(userEntity.get(), userVO);
-                BeanUtils.copyProperties(userEntity.get().getDeliveryUserIdentification(), userVO.getDeliveryUserIdentification());
+                if(userEntity.get().getDeliveryUserIdentification() != null){
+                    BeanUtils.copyProperties(userEntity.get().getDeliveryUserIdentification(), userVO.getDeliveryUserIdentification());
+                }
                 userVO.setPassword(null);
                 if(!userEntity.get().getAddressList().isEmpty()){
                     Set<AddressVO> addressVOS = new HashSet<>();
@@ -121,7 +128,9 @@ public class UserServiceImpl implements IUserService {
             if(userEntity.isPresent()){
                 UserVO userVO = new UserVO();
                 BeanUtils.copyProperties(userEntity.get(), userVO);
-                BeanUtils.copyProperties(userEntity.get().getDeliveryUserIdentification(), userVO.getDeliveryUserIdentification());
+                if(userEntity.get().getDeliveryUserIdentification() != null){
+                    BeanUtils.copyProperties(userEntity.get().getDeliveryUserIdentification(), userVO.getDeliveryUserIdentification());
+                }
                 userVO.setPassword(null);
                 if(!userEntity.get().getAddressList().isEmpty()){
                     Set<AddressVO> addressVOS = new HashSet<>();
