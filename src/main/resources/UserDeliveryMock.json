@@ -1,0 +1,36 @@
+{
+  "name": "raja raj",
+  "userName": "123456789",
+  "password": "raj123$",
+  "mobileNumber": "123456789",
+  "emailId": "jhon@gmail.com",
+  "gender": "Male",
+  "country": "India",
+  "region": "Tamil Nadu",
+  "userType": "BUSINESS",
+  "deliveryUserIdentification": {
+    "aadharNo": "123456789",
+    "accountNumber": "1234567890",
+    "accountHolderName": "test",
+    "bankName": "ICICI",
+    "ifscCode": "123456",
+    "branchName": "test",
+    "accountType": "SAVINGS"
+  },
+  "addressList": [
+    {
+      "street": "test BUSINESS",
+      "city": "test BUSINESS",
+      "state": "test BUSINESS",
+      "postalCode": "123456",
+      "addressLine1": "test BUSINESS",
+      "addressLine2": "test BUSINESS",
+      "country": "test BUSINESS",
+      "buildingName": "test BUSINESS",
+      "floor": "test BUSINESS",
+      "landMark": "test BUSINESS",
+      "flatNumber": "test BUSINESS",
+      "latlang": "test BUSINESS"
+    }
+  ]
+}
