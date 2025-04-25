@@ -40,16 +40,21 @@ public class UserServiceImpl implements IUserService {
             userRepository.findAll().forEach(e -> {
                 UserVO userVO = new UserVO();
                 BeanUtils.copyProperties(e, userVO);
+                if(e.getDeliveryUserIdentification() != null){
+                    BeanUtils.copyProperties(e.getDeliveryUserIdentification(), userVO.getDeliveryUserIdentification());
+                }
 
                 if(!e.getAddressList().isEmpty()){
                     Set<AddressVO> addressVOS = new HashSet<>();
                     e.getAddressList().forEach(a -> {
                         AddressVO addressVO = new AddressVO();
                         BeanUtils.copyProperties(a, addressVO);
+                        userVO.setPassword(null);
                         addressVOS.add(addressVO);
                     });
                     userVO.setAddressList(addressVOS);
                 }
+
 
                 userVOList.add(userVO);
             });
@@ -66,7 +71,10 @@ public class UserServiceImpl implements IUserService {
             if(userEntity.isPresent()){
                 UserVO userVO = new UserVO();
                 BeanUtils.copyProperties(userEntity.get(), userVO);
-
+                if(userEntity.get().getDeliveryUserIdentification() != null){
+                    BeanUtils.copyProperties(userEntity.get().getDeliveryUserIdentification(), userVO.getDeliveryUserIdentification());
+                }
+                userVO.setPassword(null);
                 if(!userEntity.get().getAddressList().isEmpty()){
                     Set<AddressVO> addressVOS = new HashSet<>();
                     userEntity.get().getAddressList().forEach(a -> {
@@ -92,6 +100,10 @@ public class UserServiceImpl implements IUserService {
             if(userEntity.isPresent()){
                 UserVO userVO = new UserVO();
                 BeanUtils.copyProperties(userEntity.get(), userVO);
+                if(userEntity.get().getDeliveryUserIdentification() != null){
+                    BeanUtils.copyProperties(userEntity.get().getDeliveryUserIdentification(), userVO.getDeliveryUserIdentification());
+                }
+                userVO.setPassword(null);
                 if(!userEntity.get().getAddressList().isEmpty()){
                     Set<AddressVO> addressVOS = new HashSet<>();
                     userEntity.get().getAddressList().forEach(a -> {
@@ -116,6 +128,10 @@ public class UserServiceImpl implements IUserService {
             if(userEntity.isPresent()){
                 UserVO userVO = new UserVO();
                 BeanUtils.copyProperties(userEntity.get(), userVO);
+                if(userEntity.get().getDeliveryUserIdentification() != null){
+                    BeanUtils.copyProperties(userEntity.get().getDeliveryUserIdentification(), userVO.getDeliveryUserIdentification());
+                }
+                userVO.setPassword(null);
                 if(!userEntity.get().getAddressList().isEmpty()){
                     Set<AddressVO> addressVOS = new HashSet<>();
                     userEntity.get().getAddressList().forEach(a -> {
@@ -162,6 +178,27 @@ public class UserServiceImpl implements IUserService {
                 if(userVO.getUserType().name().equalsIgnoreCase(UserType.DELIVERY.name())){
                     if(userVO.getAddressList().isEmpty()){
                         error = error + " Personal Address";
+                    }
+                    if(StringUtils.isBlank(userVO.getDeliveryUserIdentification().getAadharNo())){
+                        error = error + " Aadhar Number";
+                    }
+                    if(StringUtils.isBlank(userVO.getDeliveryUserIdentification().getAccountNumber())){
+                        error = error + " Account Number";
+                    }
+                    if(StringUtils.isBlank(userVO.getDeliveryUserIdentification().getAccountHolderName())){
+                        error = error + " Account Holder Number";
+                    }
+                    if(StringUtils.isBlank(userVO.getDeliveryUserIdentification().getBankName())){
+                        error = error + " Bank Number";
+                    }
+                    if(StringUtils.isBlank(userVO.getDeliveryUserIdentification().getBranchName())){
+                        error = error + " Branch Number";
+                    }
+                    if(StringUtils.isBlank(userVO.getDeliveryUserIdentification().getIfscCode())){
+                        error = error + " IFSC Code";
+                    }
+                    if(userVO.getDeliveryUserIdentification().getAccountType() == null || StringUtils.isBlank(userVO.getDeliveryUserIdentification().getAccountType().name())){
+                        error = error + " Account Type";
                     }
                 }
             }

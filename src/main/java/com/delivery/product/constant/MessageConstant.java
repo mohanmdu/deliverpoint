@@ -7,6 +7,7 @@ public class MessageConstant {
 
     public static final String USER_CREATED_MSG="User Created Successfully";
     public static final String LOGIN_SUCCESS="User login Successfully";
+    public static final String LOGOUT_SUCCESS="User logout Successfully";
     public static final String USER_UPDATED_MSG="User Updated Successfully";
     public static final String USER_DELETED_MSG="User Deleted Successfully";
     public static final String USER_GET_ALL_MSG="Get All User Successfully";
