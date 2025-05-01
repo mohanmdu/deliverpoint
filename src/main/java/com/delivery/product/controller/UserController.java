@@ -44,6 +44,7 @@ public class UserController {
     @GetMapping(value = "/get-by-user-id/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseVO> getByUserId(@PathVariable Long userId){
         Optional<UserVO> userVO = userService.findByUserId(userId);
+        userVO.ifPresent(vo -> vo.setPassword(null));
         return userVO.map(vo -> new ResponseEntity<>(appUtil.successResponse(vo, AppConstant.USER_RESPONSE_VO, MessageConstant.USER_GET_BY_ID_MSG), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(appUtil.failedResponse(MessageConstant.NO_DATA_FOUND, String.format(MessageConstant.USER_DATA_NO_FOUND_MSG, userId)), HttpStatus.BAD_REQUEST));
     }
@@ -63,7 +64,9 @@ public class UserController {
                 String encodedPassword = encoder.encode(userVO.getPassword());
                 userVO.setStatus(UserStatus.ACTIVE);
                 userVO.setPassword(encodedPassword);
-                return new ResponseEntity<>(appUtil.successResponse(userService.saveUser(userVO), AppConstant.USER_RESPONSE_VO,MessageConstant.USER_CREATED_MSG), HttpStatus.CREATED);
+                Optional<UserVO> optionalUserVO = userService.saveUser(userVO);
+                optionalUserVO.ifPresent(vo -> vo.setPassword(null));
+                return new ResponseEntity<>(appUtil.successResponse(optionalUserVO, AppConstant.USER_RESPONSE_VO,MessageConstant.USER_CREATED_MSG), HttpStatus.CREATED);
             }
         }else{
             return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.USER_ALREADY_EXISTS_MSG, userVO.getMobileNumber())), HttpStatus.BAD_REQUEST);
@@ -84,7 +87,9 @@ public class UserController {
                 return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.INPUT_ERROR, error)), HttpStatus.BAD_REQUEST);
             }else{
                 userVO.setPassword(userVODb.get().getPassword());
-                return new ResponseEntity<>(appUtil.successResponse(userService.saveUser(userVO), AppConstant.USER_RESPONSE_VO,MessageConstant.USER_UPDATED_MSG), HttpStatus.NO_CONTENT);
+                Optional<UserVO> optionalUserVO = userService.saveUser(userVO);
+                optionalUserVO.ifPresent(vo -> vo.setPassword(null));
+                return new ResponseEntity<>(appUtil.successResponse(optionalUserVO, AppConstant.USER_RESPONSE_VO,MessageConstant.USER_UPDATED_MSG), HttpStatus.NO_CONTENT);
             }
         }else{
             return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.USER_DATA_NO_FOUND_MSG, userId)), HttpStatus.BAD_REQUEST);
@@ -109,7 +114,9 @@ public class UserController {
             if(!StringUtils.isBlank(userVO.getName())){
                 userVODb.get().setName(userVO.getName());
             }
-            return new ResponseEntity<>(appUtil.successResponse(userService.saveUser(userVO), AppConstant.USER_RESPONSE_VO,MessageConstant.USER_UPDATED_MSG), HttpStatus.NO_CONTENT);
+            Optional<UserVO> optionalUserVO = userService.saveUser(userVODb.get());
+            optionalUserVO.ifPresent(vo -> vo.setPassword(null));
+            return new ResponseEntity<>(appUtil.successResponse(optionalUserVO, AppConstant.USER_RESPONSE_VO,MessageConstant.USER_UPDATED_MSG), HttpStatus.NO_CONTENT);
         }else{
             return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.USER_DATA_NO_FOUND_MSG, userId)), HttpStatus.BAD_REQUEST);
         }
@@ -137,8 +144,11 @@ public class UserController {
             }
             if(!userVO.getDeviceId().equalsIgnoreCase("WEB")){
                 userVOContactDb.get().setDeviceId(userVO.getDeviceId());
-                return new ResponseEntity<>(appUtil.successResponse(userService.saveUserDeviceId(userVOContactDb.get()), AppConstant.USER_RESPONSE_VO,MessageConstant.LOGIN_SUCCESS), HttpStatus.CREATED);
+                Optional<UserVO> optionalUserVO = userService.saveUserDeviceId(userVOContactDb.get());
+                optionalUserVO.ifPresent(vo -> vo.setPassword(null));
+                return new ResponseEntity<>(appUtil.successResponse(optionalUserVO, AppConstant.USER_RESPONSE_VO,MessageConstant.LOGIN_SUCCESS), HttpStatus.CREATED);
             }
+            userVOContactDb.ifPresent(vo -> vo.setPassword(null));
             return new ResponseEntity<>(appUtil.successResponse(userVOContactDb, AppConstant.USER_RESPONSE_VO,MessageConstant.LOGIN_SUCCESS), HttpStatus.CREATED);
         }else{
             return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.LOGIN_FAILED, userVO.getMobileNumber())), HttpStatus.BAD_REQUEST);
@@ -150,8 +160,10 @@ public class UserController {
     public ResponseEntity<ResponseVO> getByUserId(@PathVariable String userName, @PathVariable String deviceId){
         Optional<UserVO> userVOContactDb = userService.findByUserContact(userName);
         if(!deviceId.equalsIgnoreCase("WEB")){
-            userVOContactDb.get().setDeviceId(null);
-            return new ResponseEntity<>(appUtil.successResponse(userService.saveUserDeviceId(userVOContactDb.get()), AppConstant.USER_RESPONSE_VO,MessageConstant.LOGOUT_SUCCESS), HttpStatus.CREATED);
+            userVOContactDb.ifPresent(e -> e.setDeviceId(null));
+            Optional<UserVO> optionalUserVO = userService.saveUserDeviceId(userVOContactDb.get());
+            optionalUserVO.ifPresent(vo -> vo.setPassword(null));
+            return new ResponseEntity<>(appUtil.successResponse(optionalUserVO, AppConstant.USER_RESPONSE_VO,MessageConstant.LOGOUT_SUCCESS), HttpStatus.CREATED);
         }
         return new ResponseEntity<>(appUtil.successResponse(userVOContactDb, AppConstant.USER_RESPONSE_VO,MessageConstant.LOGOUT_SUCCESS), HttpStatus.CREATED);
     }
@@ -167,7 +179,9 @@ public class UserController {
             }
             String encodedPassword = encoder.encode(changePassword.getNewPassword());
             userVOContactDb.get().setPassword(encodedPassword);
-            return new ResponseEntity<>(appUtil.successResponse(userService.saveUserDeviceId(userVOContactDb.get()), AppConstant.USER_RESPONSE_VO,MessageConstant.LOGIN_SUCCESS), HttpStatus.CREATED);
+            Optional<UserVO> optionalUserVO = userService.saveUserDeviceId(userVOContactDb.get());
+            optionalUserVO.ifPresent(vo -> vo.setPassword(null));
+            return new ResponseEntity<>(appUtil.successResponse(optionalUserVO, AppConstant.USER_RESPONSE_VO,MessageConstant.LOGIN_SUCCESS), HttpStatus.CREATED);
         }else{
             return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.LOGIN_FAILED, changePassword.getUserId())), HttpStatus.BAD_REQUEST);
         }
@@ -181,7 +195,9 @@ public class UserController {
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             String encodedPassword = encoder.encode(changePassword.getNewPassword());
             userVOContactDb.get().setPassword(encodedPassword);
-            return new ResponseEntity<>(appUtil.successResponse(userService.saveUserDeviceId(userVOContactDb.get()), AppConstant.USER_RESPONSE_VO,MessageConstant.LOGIN_SUCCESS), HttpStatus.CREATED);
+            Optional<UserVO> optionalUserVO = userService.saveUserDeviceId(userVOContactDb.get());
+            optionalUserVO.ifPresent(vo -> vo.setPassword(null));
+            return new ResponseEntity<>(appUtil.successResponse(optionalUserVO, AppConstant.USER_RESPONSE_VO,MessageConstant.LOGIN_SUCCESS), HttpStatus.CREATED);
         }else{
             return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.LOGIN_FAILED, changePassword.getUserId())), HttpStatus.BAD_REQUEST);
         }
