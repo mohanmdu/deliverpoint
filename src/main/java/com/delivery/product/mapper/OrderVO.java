@@ -14,6 +14,8 @@ public class OrderVO {
 
     private long orderId;
     private String orderDesc;
+    private String orderNumber;
+    private String contactNumber;
     private String orderType;
     private Date orderDate;
     private OrderStatus orderStatus;

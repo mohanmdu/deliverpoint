@@ -14,6 +14,7 @@ public class ChangePassword implements Serializable {
     private static final long serialVersionUID = 1234567L;
 
     private long userId;
+    private String userName;
     private String newPassword;
     private String oldPassword;
 }
