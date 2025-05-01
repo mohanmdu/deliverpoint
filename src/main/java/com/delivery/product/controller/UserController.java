@@ -173,5 +173,19 @@ public class UserController {
         }
     }
 
+    @Operation(summary = "Forget Password User Service", description = "Forget Password User Data", tags = {"Forget User Password"})
+    @PostMapping(value = "/forget-password", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseVO> forgetPassword(@RequestBody ChangePassword changePassword){
+        Optional<UserVO> userVOContactDb = userService.findByUserContact(changePassword.getUserName());
+        if(userVOContactDb.isPresent()){
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            String encodedPassword = encoder.encode(changePassword.getNewPassword());
+            userVOContactDb.get().setPassword(encodedPassword);
+            return new ResponseEntity<>(appUtil.successResponse(userService.saveUserDeviceId(userVOContactDb.get()), AppConstant.USER_RESPONSE_VO,MessageConstant.LOGIN_SUCCESS), HttpStatus.CREATED);
+        }else{
+            return new ResponseEntity<>(appUtil.failedResponse(MessageConstant.INPUT_ERROR,String.format(MessageConstant.LOGIN_FAILED, changePassword.getUserId())), HttpStatus.BAD_REQUEST);
+        }
+    }
+
 }
 

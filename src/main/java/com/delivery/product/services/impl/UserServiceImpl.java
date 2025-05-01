@@ -103,7 +103,6 @@ public class UserServiceImpl implements IUserService {
                 if(userEntity.get().getDeliveryUserIdentification() != null){
                     BeanUtils.copyProperties(userEntity.get().getDeliveryUserIdentification(), userVO.getDeliveryUserIdentification());
                 }
-                userVO.setPassword(null);
                 if(!userEntity.get().getAddressList().isEmpty()){
                     Set<AddressVO> addressVOS = new HashSet<>();
                     userEntity.get().getAddressList().forEach(a -> {
