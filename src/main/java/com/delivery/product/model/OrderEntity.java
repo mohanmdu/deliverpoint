@@ -48,6 +48,15 @@ public class OrderEntity extends AuditorEntity implements Serializable {
     @Column(name = "CANCEL_MSG")
     private String cancelMessage;
 
+    @Column(name = "ORDER_NUMBER")
+    private String orderNumber;
+
+    @Column(name = "CONTACT_NUMBER")
+    private String contactNumber;
+
+    @Column(name = "CONTACT_PERSON")
+    private String contactPerson;
+
     @ManyToMany
     @JoinTable(
             name = "USER_ORDER_SENDER",
