@@ -8,7 +8,7 @@
       "mobileNumber": "9865472136"
     }
   ],
-  "shippingAddress": [
+  "receiverUserDetails": [
     {
       "street": "test BUSINESS 1",
       "city": "test BUSINESS 1",
@@ -24,7 +24,7 @@
       "latlang": "test BUSINESS 1"
     }
   ],
-  "deliveryAddress": [
+  "deliveryUserDetails": [
     {
       "street": "test customer 2",
       "city": "test customer 2",
