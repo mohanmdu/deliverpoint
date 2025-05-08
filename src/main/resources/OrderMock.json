@@ -4,6 +4,7 @@
   "orderStatus": "PENDING",
   "senderUserDetails": [
     {
+    "userId":"1",
       "name": "ragul raj",
       "mobileNumber": "9865472136"
     }
@@ -40,6 +41,7 @@
       "latlang": "test customer 2"
     }
   ],
+  "deliveryFees": 123,
   "orderDistance": 11.5,
   "weight": 55,
   "cost": 2000

@@ -45,6 +45,7 @@ public class SecurityConfig {
                         .requestMatchers( "/dlr/user/save-user").permitAll()
                         .requestMatchers("/dlr/user/logout").permitAll()
                         .requestMatchers("/dlr/user/forget-password").permitAll()
+                        .requestMatchers("/dlr/user/change-password").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception
