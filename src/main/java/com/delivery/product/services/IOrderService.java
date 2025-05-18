@@ -28,4 +28,6 @@ public interface IOrderService {
     Optional<OrderVO> cancelOrderByDelivery(Long orderId, Long userId, String cancelMessage);
 
     List<AddressVO> getAllAddressByUser(String userName, UserType userType);
+
+    List<OrderVO> findAllOrderCreatedBy(String userName);
 }

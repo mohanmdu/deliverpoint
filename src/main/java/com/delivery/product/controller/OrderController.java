@@ -43,6 +43,12 @@ public class OrderController {
         return new ResponseEntity<>(appUtil.successResponse(orderService.findAllOrder(), AppConstant.ORDER_RESPONSE_VO, MessageConstant.ORDER_GET_ALL_MSG), HttpStatus.OK);
     }
 
+    @Operation(summary = "Get All Active Order Service by created By", description = "Find All Active Order Data by created By", tags = {"Delivery Get All Active Order  by created By"})
+    @GetMapping(value = "/get-all-order-by-created-by/{userName}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ResponseVO> getAllOrderCreatedBy(@PathVariable String userName){
+        return new ResponseEntity<>(appUtil.successResponse(orderService.findAllOrderCreatedBy(userName), AppConstant.ORDER_RESPONSE_VO, MessageConstant.ORDER_GET_ALL_MSG), HttpStatus.OK);
+    }
+
     @Operation(summary = "Get All Active Order Service", description = "Find All Active Order Data", tags = {"Delivery Get All Active Order"})
     @GetMapping(value = "/get-all-active-order/{userName}/{orderStatus}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseVO> getAllActiveOrder(@PathVariable String userName, @PathVariable OrderStatus orderStatus){

@@ -409,4 +409,20 @@ public class OrderServiceImpl implements IOrderService {
         return addressVOList;
     }
 
+    @Override
+    public List<OrderVO> findAllOrderCreatedBy(String userName) {
+        List<OrderVO> orderVOList = new ArrayList<>();
+        try{
+            orderRepository.findByCreatedBy(userName).forEach(e -> {
+                OrderVO orderVO = new OrderVO();
+                BeanUtils.copyProperties(e, orderVO);
+                setOrderChildInfo(orderVO, e);
+                orderVOList.add(orderVO);
+            });
+        }catch (Exception e){
+            throw new CustomeException(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR,e.getMessage(),e.getStackTrace());
+        }
+        return orderVOList;
+    }
+
 }
